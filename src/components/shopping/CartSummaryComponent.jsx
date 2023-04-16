@@ -22,7 +22,6 @@ import { useEffect, useState, useContext} from "react";
 import { useParams } from "react-router-dom";
 import { baseService } from "../../network/service";
 import { CartContext, CartContextProvider } from "../../contexts/CartContext";
-import ShoppingButtonComponent from "./ShoppingButtonComponent";
 import CartCheckoutComponent from "./CartCheckoutComponent";
 import CartDetailComponent from './CartDetailComponent';
 import Card from '@mui/material/Card';
@@ -50,7 +49,6 @@ export default function CartSummaryComponent({cartId}) {
   }
 
   useEffect(() => {
-    console.log("EDAAAAA")
     getData()
   }, [])
 
@@ -76,7 +74,7 @@ export default function CartSummaryComponent({cartId}) {
                         {/* {<Typography variant="h6" style={{ color: 'black' }}> */}
                                 <div className="some-class">
                                     {/* <span align="left" {cartProduct.product.productName} /> */}
-                                    <span  >  {cartProduct.product.productName} </span>
+                                    <span  >  {cartProduct.product.productName}</span> 
                                     <span >  {cartProduct.salesQuantity}  Adet </span>
                                     <span >  {cartProduct.product.salesPrice * cartProduct.salesQuantity} TL </span>
                                  </div> 

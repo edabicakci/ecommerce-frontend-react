@@ -22,6 +22,7 @@ import { useEffect, useState, useContext} from "react";
 import { useParams } from "react-router-dom";
 import { baseService } from "../../network/service";
 import { CartContext, CartContextProvider } from "../../contexts/CartContext";
+import { CartItemCountContext, CartItemCountContextProvider } from "../../contexts/CartItemCountContext";
 import ShoppingButtonComponent from "./ShoppingButtonComponent";
 import CartCheckoutComponent from "./CartCheckoutComponent";
 
@@ -33,6 +34,7 @@ const Demo = styled('div')(({ theme }) => ({
 export default function CartDetailComponent() {
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
+  const {itemCount, setItemCount } = useContext(CartItemCountContext);
 
   const {cartId,setCartId} = useContext(CartContext);
   const [cart, setCart] = useState({});
@@ -45,15 +47,17 @@ export default function CartDetailComponent() {
     setRefresh(0)
   }
 
-  const refreshProductList =  (productId) => {
-    deleteProduct(productId)
+  const refreshProductList =  (productId, salesQuantity) => {
+    deleteProduct(productId, salesQuantity)
     setRefresh(1);
   }
 
   const checkout =  () => {
     navigate(`/cart/checkout`, { replace: true })
   }
-  const deleteProduct = async (productId) => {
+  const deleteProduct = async (productId, salesQuantity) => {
+
+    setItemCount( itemCount - salesQuantity)
     await baseService.delete(`/cart/remove/${cartId}/${productId}`, {}) 
   }
 
@@ -70,18 +74,6 @@ export default function CartDetailComponent() {
       else{
         return (
             <Box sx={{ flexGrow: 1, maxWidth: 752 }}>
-              {/* <FormGroup row>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={dense}
-                      onChange={(event) => setDense(event.target.checked)}
-                    />
-                  }
-                  label="Enable dense"
-                />
-                
-              </FormGroup> */}
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                   <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
@@ -93,9 +85,8 @@ export default function CartDetailComponent() {
                         <ListItem
                           secondaryAction={
                             <>
-                            {/* <ShoppingButtonComponent /> */}
-                            
-                            <IconButton edge="end" aria-label="delete" onClick={() => refreshProductList(cartProduct.product.id)}>
+                            <ShoppingButtonComponent cartId = { cartId } productId = {cartProduct.product.id} cartProduct = {cartProduct }/>        
+                            <IconButton edge="end" aria-label="delete" onClick={() => refreshProductList(cartProduct.product.id, cartProduct.salesQuantity)}>
                               <DeleteIcon  />
                             </IconButton>
                             </>
@@ -114,7 +105,7 @@ export default function CartDetailComponent() {
                             // {cartProduct.salesQuantity}</Typography>}
                             primary={<Typography variant="h6" style={{ color: 'black' }}>
                               <p>{cartProduct.product.productName} </p> 
-                              <p> {cartProduct.salesQuantity}  Adet </p> 
+                              {/* <p> {cartProduct.salesQuantity}  Adet </p>  */}
                               <p> {cartProduct.product.salesPrice * cartProduct.salesQuantity} TL </p> 
                              
                             </Typography>}

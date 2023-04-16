@@ -4,6 +4,7 @@ import './index.css';
 import { BrowserRouter } from "react-router-dom";
 
 import { CartContextProvider } from "./contexts/CartContext";
+import { CartItemCountContextProvider } from "./contexts/CartItemCountContext";
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -13,11 +14,12 @@ root.render(
 
   <BrowserRouter>
   <CartContextProvider>
+  <CartItemCountContextProvider>
   <React.StrictMode>
     <App />
   </React.StrictMode>
+  </CartItemCountContextProvider>
   </CartContextProvider>
-
   </BrowserRouter>
 );
 

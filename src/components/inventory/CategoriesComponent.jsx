@@ -35,7 +35,7 @@ export default function CategoriesComponent() {
                     <Grid item xs={3}>
                         <Card>
                             <CardContent>
-                                {<CategoryComponent key = category={category} />}
+                                {<CategoryComponent category={category} />}
                             </CardContent>
                         </Card>
                     </Grid>
